@@ -1,9 +1,12 @@
 package ru.javawebinar.topjava.repository.jpa;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.model.UserMeal;
 import ru.javawebinar.topjava.repository.UserMealRepository;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -13,9 +16,14 @@ import java.util.List;
  */
 
 @Repository
+@Transactional(readOnly = true)
 public class JpaUserMealRepositoryImpl implements UserMealRepository {
 
+    @PersistenceContext
+    private EntityManager em;
+
     @Override
+    @Transactional
     public UserMeal save(UserMeal userMeal, int userId) {
         return null;
     }
