@@ -5,6 +5,13 @@ import org.hibernate.validator.constraints.NotEmpty;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+@NamedQueries({
+        @NamedQuery(name = "UserMeal.delete", query = "DELETE from UserMeal um WHERE um.id=:id AND um.user.id=:userId"),
+        @NamedQuery(name = "UserMeal.getAll", query = "SELECT um from UserMeal um WHERE um.user.id=:userId " +
+                "ORDER BY um.dateTime DESC"),
+        @NamedQuery(name = "UserMeal.getBetween", query = "SELECT um from UserMeal um WHERE um.user.id=:userId " +
+                "AND um.dateTime BETWEEN :startDate AND :endDate ORDER BY um.dateTime DESC")
+})
 @Entity
 @Table(name = "meals")
 public class UserMeal extends BaseEntity {
