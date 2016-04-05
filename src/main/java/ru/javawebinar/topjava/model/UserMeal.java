@@ -19,7 +19,8 @@ public class UserMeal extends BaseEntity {
     @Column(name = "date_time", columnDefinition = "default timestamp now()")
     private LocalDateTime dateTime;
 
-    @Column(name = "description")
+    @Column(name = "description", nullable = false)
+    @NotEmpty
     private String description;
 
     @Column(name = "calories", nullable = false)
@@ -27,6 +28,7 @@ public class UserMeal extends BaseEntity {
     protected int calories;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     public UserMeal() {

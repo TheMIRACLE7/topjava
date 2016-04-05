@@ -3,6 +3,7 @@ package ru.javawebinar.topjava.repository.jpa;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.model.UserMeal;
 import ru.javawebinar.topjava.repository.UserMealRepository;
 import ru.javawebinar.topjava.service.UserService;
@@ -13,17 +14,9 @@ import javax.persistence.Query;
 import java.time.LocalDateTime;
 import java.util.List;
 
-/**
- * User: gkisline
- * Date: 26.08.2014
- */
-
 @Repository
 @Transactional(readOnly = true)
 public class JpaUserMealRepositoryImpl implements UserMealRepository {
-
-    @Autowired
-    private UserService userService;
 
     @PersistenceContext
     private EntityManager em;
@@ -31,10 +24,11 @@ public class JpaUserMealRepositoryImpl implements UserMealRepository {
     @Override
     @Transactional
     public UserMeal save(UserMeal userMeal, int userId) {
-        userMeal.setUser(userService.get(userId));
+        userMeal.setUser(em.getReference(User.class, userId));
         if (userMeal.isNew()){
             em.persist(userMeal);
         } else {
+            if (get(userMeal.getId(), userId) == null) return null;
             em.merge(userMeal);
         }
         return userMeal;
@@ -43,7 +37,9 @@ public class JpaUserMealRepositoryImpl implements UserMealRepository {
     @Override
     @Transactional
     public boolean delete(int id, int userId) {
-        return em.createNamedQuery("UserMeal.delete").setParameter("id", id).setParameter("userId", userId)
+        return em.createNamedQuery("UserMeal.delete")
+                .setParameter("id", id)
+                .setParameter("userId", userId)
                 .executeUpdate() != 0;
     }
 
