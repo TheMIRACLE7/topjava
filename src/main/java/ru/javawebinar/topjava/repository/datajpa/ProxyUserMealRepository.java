@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.model.UserMeal;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -31,8 +32,13 @@ public interface ProxyUserMealRepository extends JpaRepository<UserMeal, Integer
     @Override
     UserMeal findOne(Integer id);
 
-    @Override
-    List<UserMeal> findAll(Sort sort);
+    @Modifying
+    @Query("SELECT m FROM UserMeal m WHERE m.user.id=:userId ORDER BY m.dateTime DESC")
+    List<UserMeal> findAll(@Param("userId") int userId);
 
-    User getByEmail(String email);
+    @Modifying
+    @Query("SELECT m FROM UserMeal m WHERE m.user.id=:userId AND m.dateTime BETWEEN :startDate AND :endDate " +
+            "ORDER BY m.dateTime DESC")
+    List<UserMeal> findBetween(@Param("userId") int userId, @Param("startDate") LocalDateTime startDate,
+                               @Param("endDate") LocalDateTime endDate);
 }
