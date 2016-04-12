@@ -19,13 +19,16 @@ public class DataJpaUserMealRepositoryImpl implements UserMealRepository{
     @Autowired
     private ProxyUserMealRepository proxy;
 
+    @Autowired
+    private ProxyUserRepository userProxy;
+
     @Override
     public UserMeal save(UserMeal userMeal, int userId) {
-        if (userMeal.getUser().getId() == userId) {
-            return proxy.save(userMeal);
-        } else {
+        userMeal.setUser(userProxy.getOne(userId));
+        if (!userMeal.isNew() && get(userMeal.getId(), userId) == null) {
             return null;
         }
+        return proxy.save(userMeal);
     }
 
     @Override
@@ -36,12 +39,7 @@ public class DataJpaUserMealRepositoryImpl implements UserMealRepository{
 
     @Override
     public UserMeal get(int id, int userId) {
-        UserMeal m = proxy.findOne(id);
-        if (m.getUser().getId() == userId){
-            return m;
-        } else {
-            return null;
-        }
+        return proxy.get(id, userId);
     }
 
     @Override
