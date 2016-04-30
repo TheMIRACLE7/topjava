@@ -6,7 +6,7 @@ import ru.javawebinar.topjava.model.BaseEntity;
 
 /**
  * GKislin
- * 06.03.2015.1
+ * 06.03.2015.
  */
 public class LoggedUser {
     private LoggedUser() {
