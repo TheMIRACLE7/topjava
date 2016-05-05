@@ -9,6 +9,8 @@ import ru.javawebinar.topjava.LoggedUser;
 import ru.javawebinar.topjava.service.UserService;
 import ru.javawebinar.topjava.web.meal.UserMealRestController;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * User: gkislin
  * Date: 22.08.2014
